@@ -1,6 +1,6 @@
 # my-django-site
 
 1. cd Desktop/my-django-site
-1. source venv/bin/activate
-2. python manage.py runserver
-http://127.0.0.1:8000/test2
+2. source venv/bin/activate
+3. python manage.py runserver
+4. http://127.0.0.1:8000/test2
