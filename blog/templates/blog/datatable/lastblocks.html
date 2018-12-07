@@ -1,0 +1,54 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+        <title>Last Blocks</title>
+        <link href="">
+    </head>
+    <body>
+    <h1>Last Blocks</h1>
+
+
+    <table id="table_id" class="display">
+    <thead>
+        <tr>
+            <th>generator</th>
+            <th>height</th>
+            <th>blockid</th>
+            <th>reward</th>
+            <th>timestamp</th>
+            <th>totalamount</th>
+            <th>totalforged</th>
+            <th>transactionscount</th>
+            <th>username</th>
+            <th>rank</th>
+        </tr>
+    </thead>
+    <tbody>
+{% for block in blocks %}
+    <tr>
+    <td>{{ block.generator }}</td>
+    <td>{{ block.height }}</td>
+    <td>{{ block.blockid }}</td>
+    <td>{{ block.reward }}</td>
+    <td>{{ block.timestamp }}</td>
+    <td>{{ block.totalamount }}</td>
+    <td>{{ block.totalforged }}</td>
+    <td>{{ block.transactionscount }}</td>
+    <td>{{ block.username }}</td>
+    <td>{{ block.rank }}</td>
+    </tr>
+{% endfor %}
+    </tbody>
+</table>
+    </body>
+
+    <script>
+        $(document).ready( function () {
+            $('#table_id').DataTable();
+         } );
+    </script>
+
+</html>

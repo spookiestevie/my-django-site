@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+        <title>Latest Transactions</title>
+        <link href="">
+    </head>
+    <body>
+    <h1>Latest Transactions</h1>
+
+
+    <table id="table_id" class="display">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>amount</th>
+            <th>fee</th>
+            <th>height</th>
+            <th>senderid</th>
+            <th>recipientid</th>
+            <th>timestamp</th>
+            <th>type</th>
+            <th>confirmations</th>
+        </tr>
+    </thead>
+    <tbody>
+{% for ix in tx %}
+    <tr>
+    <td>{{ ix.txid }}</td>
+    <td>{{ ix.amount }}</td>
+    <td>{{ ix.fee }}</td>
+    <td>{{ ix.height }}</td>
+    <td>{{ ix.senderid }}</td>
+    <td>{{ ix.recipientid }}</td>
+    <td>{{ ix.timestamp }}</td>
+    <td>{{ ix.txtype }}</td>
+    <td>{{ ix.confirmations }}</td>
+    </tr>
+{% endfor %}
+    </tbody>
+</table>
+    </body>
+
+    <script>
+        $(document).ready( function () {
+            $('#table_id').DataTable();
+         } );
+    </script>
+
+</html>

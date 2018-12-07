@@ -1,0 +1,180 @@
+<html>
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Title</title>
+</head>
+
+<body>
+
+    <br>
+    <div class="container">
+        <nav class="nav justify-content-center">
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Number of rows</button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    <button class="dropdown-item" type="button" onclick="get_table(10)">10</button>
+                    <button class="dropdown-item" type="button" onclick="get_table(25)">25</button>
+                    <button class="dropdown-item" type="button" onclick="get_table(50)">50</button>
+                    <button class="dropdown-item" type="button" onclick="get_table(100)">100</button><!--calls get_table with param: rows (how many rows you want)-->
+                </div>
+            </div>
+            <a class="nav-link active" href="#">Active</a>
+            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link disabled" href="#">Disabled</a>
+            <form class="form-inline">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </nav>
+    </div>
+
+    <br>
+
+    <div>
+        <table id="table1" class="table table-hover">
+
+            <thead class="thead-dark">
+                <tr>
+                <th>generator</th>
+                <th>height</th>
+                <th>blockid</th>
+                <th>reward</th>
+                <th>timestamp</th>
+                <th>totalamount</th>
+                <th>totalforged</th>
+                <th>transactionscount</th>
+                <th>username</th>
+                <th>rank</th>
+                </tr>
+            </thead>
+            <tbody id="tb1">
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <br>
+
+        <nav id="pagination" aria-label="Page navigation example">
+          <ul id="pages" class="pagination justify-content-center">
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1">Previous</a>
+            </li>
+            <li class="page-item" id="next">
+              <a class="page-link" href="#">Next</a>
+            </li>
+          </ul>
+        </nav>
+    </div>
+</body>
+<script>
+
+
+    //Hide pagination until table called
+    $( document ).ready(function() {
+    $("#pagination").hide();
+    });
+
+    function addpagebtn(pages){
+        $('#next').remove();
+        for (i = 0; i < pages; i++){
+            $('#pages').append('<li class="page-item"><a id="' + (i+1) + '"class="page-link" href="#" onclick="changepage(' + (i+1) + ')">' + (i+1) + '</a></li>')
+        }
+        $('#pages').append('<li class="page-item" id="next"><a class="page-link" href="#">Next</a></li>')
+    }
+
+
+    function changepage(pageid){
+        var rows = localStorage.getItem('rows');
+        localStorage.setItem('pageid', pageid);
+        get_table(rows, pageid);
+
+        console.log(rows, pageid);
+    }
+
+    function nextpg(entries, rows) {
+        //function to enable next page functionality
+        //var pages = (entries/rows);
+        var pagesneeded = entries/rows.length;
+        //if pagesneeded exceeds 5, will just show 5.
+        if (pagesneeded > 5) {
+            addpagebtn(5);
+        }else{
+            addpagebtn(pagesneeded);
+        }
+
+    }
+
+    function get_table(rows, pageid = 1) {
+        localStorage.setItem('rows', rows);
+
+
+        $("#pagination").show(); //shows pagination as table loaded
+        $('#tb1').empty(); //start table as empty
+        var pagenum = 1;
+
+
+        $.ajax({
+            method: "POST",
+            url: "/json/",
+            data: {'rows': rows, 'page': pagenum, 'pageid': pageid},
+            dataType: 'json',
+            success: function (response) {
+                var entries = response['entries'];
+                var rows =  response['blocks'];
+                var pagenums = response['pagenums']
+
+                nextpg(entries,rows);
+                //var json = JSON.parse(response);
+                for (var key in response['blocks']) {
+                    var resp = response['blocks'][key];
+                    var query = '<tr><td>';
+                    query += resp['generator'].toString();
+                    query += '</td><td>';
+                    query += resp['height'].toString();
+                    query += '</td><td>';
+                    query += resp['blockid'].toString();
+                    query += '</td><td>';
+                    query += resp['reward'].toString();
+                    query += '</td><td>';
+                    query += resp['timestamp'].toString();
+                    query += '</td><td>';
+                    query += resp['totalamount'].toString();
+                    query += '</td><td>';
+                    query += resp['totalforged'].toString();
+                    query += '</td><td>';
+                    query += resp['transactionscount'].toString();
+                    query += '</td><td>';
+                    query += resp['username'].toString();
+                    query += '</td><td>';
+                    query += resp['rank'].toString();
+                    query += '</td></tr>';
+                    $('#tb1').append(query);
+
+                }
+                var rows_info = 'Showing ';
+                rows_info += rows;
+                rows_info += ' of ';
+                rows_info += response['entries'];
+                $('#example_info').text(rows_info);
+                addpagebtn(pagenums)
+
+            }
+        });
+    }
+</script>
+</html>

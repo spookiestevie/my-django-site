@@ -1,0 +1,120 @@
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+</head>
+<body>
+<table id="example" class="display" style="width:100%">
+        <thead>
+            <tr>
+            <th>generator</th>
+            <th>height</th>
+            <th>blockid</th>
+            <th>reward</th>
+            <th>timestamp</th>
+            <th>totalamount</th>
+            <th>totalforged</th>
+            <th>transactionscount</th>
+            <th>username</th>
+            <th>rank</th>
+            </tr>
+        </thead>
+        <tbody id="tb1">
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+            <th>generator</th>
+            <th>height</th>
+            <th>blockid</th>
+            <th>reward</th>
+            <th>timestamp</th>
+            <th>totalamount</th>
+            <th>totalforged</th>
+            <th>transactionscount</th>
+            <th>username</th>
+            <th>rank</th>
+            </tr>
+        </tfoot>
+    </table>
+
+<button id="nextpgbtn" onclick="nextpg()">Click me</button>
+</body>
+<script>
+    function nextpg() {
+
+        var pgnum = document.getElementsByClassName("paginate_button current")[0].text;
+        pgnum = Number(pgnum);
+        console.log(pgnum);
+        pgnum += 1;
+        document.getElementsByClassName("paginate_button current")[0].text = pgnum;
+
+        get_table();
+    }
+
+    function get_table() {
+
+        var rows = document.getElementsByName("example_length")[0].value;
+        var pagenum = document.getElementsByClassName("paginate_button current")[0].text;
+        console.log(rows);
+        $.ajax({
+            method: "POST",
+            url: "/json/",
+            data: {'rows': rows, 'page': pagenum},
+            dataType: 'json',
+            success: function (response) {
+                //var json = JSON.parse(response);
+                for (var key in response['blocks']) {
+                    var resp = response['blocks'][key];
+                    var query = '<tr><td>';
+                    query += resp['generator'].toString();
+                    query += '</td><td>';
+                    query += resp['height'].toString();
+                    query += '</td><td>';
+                    query += resp['blockid'].toString();
+                    query += '</td><td>';
+                    query += resp['reward'].toString();
+                    query += '</td><td>';
+                    query += resp['timestamp'].toString();
+                    query += '</td><td>';
+                    query += resp['totalamount'].toString();
+                    query += '</td><td>';
+                    query += resp['totalforged'].toString();
+                    query += '</td><td>';
+                    query += resp['transactionscount'].toString();
+                    query += '</td><td>';
+                    query += resp['username'].toString();
+                    query += '</td><td>';
+                    query += resp['rank'].toString();
+                    query += '</td></tr>';
+                    $('#tb1').append(query);
+
+                }
+                var rows_info = 'Showing ';
+                rows_info += rows;
+                rows_info += ' of ';
+                rows_info += response['entries'];
+                $('#example_info').text(rows_info);
+            }
+        });
+    }
+    $( document ).ready(function() {
+        $('#example').DataTable({
+            stateSave: true
+        });
+        get_table();
+    });
+</script>
+</html>

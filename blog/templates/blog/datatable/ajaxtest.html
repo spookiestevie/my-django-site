@@ -1,0 +1,40 @@
+ console.log(5);
+        $.ajax({
+            method: "GET",
+            url: "/json",
+            dataType: 'json',
+            success: function(response) {
+                //var json = JSON.parse(response);
+                for (var key in response['blocks']) {
+                    var resp = response['blocks'][key];
+                    $('#p1').append(resp['username'], ' ', resp['blockid'],' <br>');
+
+                }
+
+            }});
+
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--<p id="p1"></p>-->
+
+<table id="example" class="display" style="width:100%">
+
+</table>
+
+</body>
+
+<script>
+    $( document ).ready(function () {
+        $('#example').DataTable();
+
+    });
+
+</script>
+</html>

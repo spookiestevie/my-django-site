@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>jQuery tablesorter 2.0 - Bootstrap Theme (Bootstrap v4.x)</title>
+
+	<!-- jQuery -->
+	<script src="/static/js/jquery-latest.min.js"></script>
+
+	<!-- Demo stuff -->
+	<link rel="stylesheet" href="/static/css/jq.css">
+	<link rel="stylesheet" href="/static/css/bootstrap-v4.min.css">
+	<link href="/static/css/prettify.css" rel="stylesheet">
+	<script src="/static/js/prettify.js"></script>
+	<script src="/static/js/docs.js"></script>
+
+	<!-- Tablesorter: required for bootstrap -->
+	<link rel="stylesheet" href="/static/css/theme.bootstrap_4.css">
+	<script src="/static/js/jquery.tablesorter.js"></script>
+	<script src="/static/js/jquery.tablesorter.widgets.js"></script>
+
+	<!-- Tablesorter: optional -->
+	<link rel="stylesheet" href="/static/css/jquery.tablesorter.pager.css">
+	<style>
+	.tablesorter-pager .btn-group-sm .btn {
+		font-size: 1.2em;
+	}
+	</style>
+	<script src="/static/js/jquery.tablesorter.pager.js"></script>
+
+	<script id="js">$(function() {
+
+	$("table").tablesorter({
+		theme : "bootstrap",
+
+		widthFixed: true,
+
+		// widget code contained in the jquery.tablesorter.widgets.js file
+		// use the zebra stripe widget if you plan on hiding any rows (filter widget)
+		// the uitheme widget is NOT REQUIRED!
+		widgets : [ "filter", "columns", "zebra" ],
+
+		widgetOptions : {
+			// using the default zebra striping class name, so it actually isn't included in the theme variable above
+			// this is ONLY needed for bootstrap theming if you are using the filter widget, because rows are hidden
+			zebra : ["even", "odd"],
+
+			// class names added to columns when sorted
+			columns: [ "primary", "secondary", "tertiary" ],
+
+			// reset filters button
+			filter_reset : ".reset",
+
+			// extra css class name (string or array) added to the filter element (input or select)
+			filter_cssFilter: [
+				'form-control',
+				'form-control',
+				'form-control',
+				'form-control',
+				'form-control',
+				'form-control',
+				'form-control',
+                'form-control',
+                'form-control'
+			]
+
+		}
+	})
+	.tablesorterPager({
+
+		// target the pager markup - see the HTML block below
+		container: $(".ts-pager"),
+
+		// target the pager page select dropdown - choose a page
+		cssGoto  : ".pagenum",
+
+		// remove rows from the table to speed up the sort of large tables.
+		// setting this to false, only hides the non-visible rows; needed if you plan to add/remove rows with the pager enabled.
+		removeRows: false,
+
+		// output string - default is '{page}/{totalPages}';
+		// possible variables: {page}, {totalPages}, {filteredPages}, {startRow}, {endRow}, {filteredRows} and {totalRows}
+		output: '{startRow} - {endRow} / {filteredRows} ({totalRows})'
+
+	});
+
+});</script>
+
+	<script>
+	$(function() {
+
+		// filter button demo code
+		$('button.filter').click(function() {
+			var col = $(this).data('column'),
+				txt = $(this).data('filter');
+			$('table').find('.tablesorter-filter').val('').eq(col).val(txt);
+			$('table').trigger('search', false);
+			return false;
+		});
+
+		// toggle zebra widget
+		$('button.zebra').click(function() {
+			var t = $(this).hasClass('btn-success');
+			$('table')
+				.toggleClass('table-striped')[0]
+				.config.widgets = (t) ? ["filter"] : ["filter", "zebra"];
+			$(this)
+				.toggleClass('btn-danger btn-success')
+				.find('span')
+				.text(t ? 'disabled' : 'enabled');
+			$('table').trigger('refreshWidgets', [false]);
+			return false;
+		});
+	});
+	</script>
+
+
+</head>
+<body>
+
+<div id="banner">
+	<h1>Title<em>Title</em></h1>
+	<h2>Title</h2>
+	<h3>Title</h3>
+</div>
+
+<div id="main">
+
+	<h1>Transactions</h1>
+	<!-- use the filter_reset : '.reset' option or include data-filter="" using the filter button demo code to reset the filters -->
+	<div class="bootstrap_buttons">
+		Reset filter : <button type="button" class="reset btn btn-primary" data-column="0" data-filter="">Reset filters</button>
+		<br>
+		Zebra widget : <button type="button" class="zebra btn btn-success"><span>enabled</span></button>
+	</div>
+	<br>
+
+	<div id="demo"><table class="table table-bordered table-striped">
+	<thead class="thead-dark"> <!-- add class="thead-light" for a light header -->
+		<tr>
+            <th>ID</th>
+            <th>amount</th>
+            <th>fee</th>
+            <th>height</th>
+            <th>senderid</th>
+            <th>recipientid</th>
+            <th>timestamp</th>
+            <th>type</th>
+            <th>confirmations</th>
+	</thead>
+	<tfoot>
+        <tr>
+            <th>ID</th>
+            <th>amount</th>
+            <th>fee</th>
+            <th>height</th>
+            <th>senderid</th>
+            <th>recipientid</th>
+            <th>timestamp</th>
+            <th>type</th>
+            <th>confirmations</th>
+        </tr>
+		<tr>
+			<th colspan="9" class="ts-pager">
+				<div class="form-inline">
+					<div class="btn-group btn-group-sm mx-1" role="group">
+						<button type="button" class="btn btn-secondary first" title="first">&#8676;</button>
+						<button type="button" class="btn btn-secondary prev" title="previous">&larr;</button>
+					</div>
+					<span class="pagedisplay"></span>
+					<div class="btn-group btn-group-sm mx-1" role="group">
+						<button type="button" class="btn btn-secondary next" title="next">&rarr;</button>
+						<button type="button" class="btn btn-secondary last" title="last">&#8677;</button>
+					</div>
+					<select class="form-control-sm custom-select px-1 pagesize" title="Select page size">
+						<option selected="selected" value="10">10</option>
+						<option value="20">20</option>
+						<option value="30">30</option>
+						<option value="all">All Rows</option>
+					</select>
+					<select class="form-control-sm custom-select px-4 mx-1 pagenum" title="Select page number"></select>
+				</div>
+			</th>
+		</tr>
+	</tfoot>
+    <tbody>
+{% for ix in tx %}
+    <tr>
+    <td>{{ ix.txid }}</td>
+    <td>{{ ix.amount }}</td>
+    <td>{{ ix.fee }}</td>
+    <td>{{ ix.height }}</td>
+    <td>{{ ix.senderid }}</td>
+    <td>{{ ix.recipientid }}</td>
+    <td>{{ ix.timestamp }}</td>
+    <td>{{ ix.txtype }}</td>
+    <td>{{ ix.confirmations }}</td>
+    </tr>
+{% endfor %}
+    </tbody>
+</table></div>
+
+</div>
+
+</body>
+</html>
