@@ -1,4 +1,4 @@
 # my-django-site
 
-source venv/bin/activate
-python manage.py runserver
+1. source venv/bin/activate
+2. python manage.py runserver
