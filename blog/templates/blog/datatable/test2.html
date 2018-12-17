@@ -72,7 +72,6 @@
         <nav id="pagination" aria-label="Page navigation example">
           <ul id="pages" class="pagination justify-content-center">
             <li class="page-item disabled">
-              <a class="page-link" href="#" tabindex="-1">Previous</a>
             </li>
             <li class="page-item" id="next">
               <a class="page-link" href="#">Next</a>
@@ -89,12 +88,17 @@
     $("#pagination").hide();
     });
 
-    function addpagebtn(pages){
+    function addpagebtn(start,finish,pages){
+        var backpg = start-1;
+        $("#pages").empty();
         $('#next').remove();
-        for (i = 0; i < pages; i++){
-            $('#pages').append('<li class="page-item"><a id="' + (i+1) + '"class="page-link" href="#" onclick="changepage(' + (i+1) + ')">' + (i+1) + '</a></li>')
+        $('#pages').append('<li class="page-item" id="back"><a id="back" class="page-link" onclick="changepage(backpg)">Previous</a>');
+
+        for (i = start; i < finish; i++){
+            $('#pages').append('<li class="page-item"><a id="' + (i) + '"class="page-link" href="#" onclick="changepage(' + (i) + ')">' + (i) + '</a></li>')
         }
-        $('#pages').append('<li class="page-item" id="next"><a class="page-link" href="#">Next</a></li>')
+
+        $('#pages').append('<li class="page-item" id="next"><a class="page-link" onclick="changepage(i)" >Next</a></li>');
     }
 
 
@@ -118,6 +122,8 @@
         }
 
     }
+
+
 
     function get_table(rows, pageid = 1) {
         localStorage.setItem('rows', rows);
@@ -171,7 +177,7 @@
                 rows_info += ' of ';
                 rows_info += response['entries'];
                 $('#example_info').text(rows_info);
-                addpagebtn(pagenums)
+                addpagebtn(pageid,pageid+5,pagenums)
 
             }
         });

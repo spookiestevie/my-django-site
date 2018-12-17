@@ -83,19 +83,31 @@
 </body>
 <script>
 
+
     //Hide pagination until table called
     $( document ).ready(function() {
     $("#pagination").hide();
     });
 
     function addpagebtn(pages){
+        $("#pages").empty();
         $('#next').remove();
-        for (i = 0; i < pages; i++){
-            $('#pages').append('<li class="page-item"><a class="page-link" href="#">' + (i+1) + '</a></li>')
+
+        for (i = 0; i < 5; i++){
+            $('#pages').append('<li class="page-item"><a id="' + (i+1) + '"class="page-link" href="#" onclick="changepage(' + (i+1) + ')">' + (i+1) + '</a></li>')
         }
+
         $('#pages').append('<li class="page-item" id="next"><a class="page-link" href="#">Next</a></li>')
     }
 
+
+    function changepage(pageid){
+        var rows = localStorage.getItem('rows');
+        localStorage.setItem('pageid', pageid);
+        get_table(rows, pageid);
+
+        console.log(rows, pageid);
+    }
 
     function nextpg(entries, rows) {
         //function to enable next page functionality
@@ -105,25 +117,29 @@
         if (pagesneeded > 5) {
             addpagebtn(5);
         }else{
-            addpagebtsn(pagesneeded);
+            addpagebtn(pagesneeded);
         }
 
     }
 
-    function get_table(rows) {
+    function get_table(rows, pageid = 1) {
+        localStorage.setItem('rows', rows);
+
 
         $("#pagination").show(); //shows pagination as table loaded
         $('#tb1').empty(); //start table as empty
         var pagenum = 1;
 
+
         $.ajax({
             method: "POST",
             url: "/json/",
-            data: {'rows': rows, 'page': pagenum},
+            data: {'rows': rows, 'page': pagenum, 'pageid': pageid},
             dataType: 'json',
             success: function (response) {
                 var entries = response['entries'];
                 var rows =  response['blocks'];
+                var pagenums = response['pagenums']
 
                 nextpg(entries,rows);
                 //var json = JSON.parse(response);
@@ -158,6 +174,7 @@
                 rows_info += ' of ';
                 rows_info += response['entries'];
                 $('#example_info').text(rows_info);
+                addpagebtn(pagenums)
 
             }
         });
