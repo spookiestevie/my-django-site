@@ -79,6 +79,11 @@
           </ul>
         </nav>
     </div>
+    <div class="container">
+        <p id="p4">Page: <span id="pagenum">1</span> </p>
+    </div>
+
+
 </body>
 <script>
 
@@ -86,6 +91,7 @@
     //Hide pagination until table called
     $( document ).ready(function() {
     $("#pagination").hide();
+    $("#p4").hide();
     });
 
     function addpagebtn(start,finish,pages){
@@ -108,6 +114,7 @@
         get_table(rows, pageid);
 
         console.log(rows, pageid);
+        $("#pagenum").text(pageid);
     }
 
     function nextpg(entries, rows) {
@@ -130,6 +137,7 @@
 
 
         $("#pagination").show(); //shows pagination as table loaded
+        $("#p4").show();
         $('#tb1').empty(); //start table as empty
         var pagenum = 1;
 
