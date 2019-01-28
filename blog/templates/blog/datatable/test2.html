@@ -98,12 +98,13 @@
         var backpg = start-1;
         $("#pages").empty();
         $('#next').remove();
-        $('#pages').append('<li class="page-item" id="back"><a id="back" class="page-link" onclick="changepage(backpg)">Previous</a>');
+
 
         for (i = start; i < finish; i++){
             $('#pages').append('<li class="page-item"><a id="' + (i) + '"class="page-link" href="#" onclick="changepage(' + (i) + ')">' + (i) + '</a></li>')
         }
 
+        $('#pages').append('<li class="page-item" id="back"><a id="back" class="page-link" onclick="changepage(i + -i)">Previous</a>');
         $('#pages').append('<li class="page-item" id="next"><a class="page-link" onclick="changepage(i)" >Next</a></li>');
     }
 
