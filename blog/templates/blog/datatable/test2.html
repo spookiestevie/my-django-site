@@ -119,7 +119,7 @@
 
     function nextpg(entries, rows) {
 
-        var pagesneeded = entries/rows.length;
+        var pagesneeded = Math.ceil(entries/rows.length);
         $("#pagenums").text(pagesneeded);
         //console.log(entries);
         console.log(pagesneeded);
