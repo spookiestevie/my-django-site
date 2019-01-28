@@ -17,3 +17,9 @@ python manage.py makemigrations
 python manage.py migrate
 
 check settings.py file and adjust postgres settings
+
+su postgres
+psql
+\c rise
+\dt+
+select count (*) rise from blog_lastblocks;
