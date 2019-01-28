@@ -80,7 +80,7 @@
         </nav>
     </div>
     <div class="container">
-        <p id="p4">Page: <span id="pagenum">1</span> </p>
+        <p id="p4">Page: <span id="pagenum">1</span>/<span id="pagenums"></span> </p>
     </div>
 
 
@@ -94,8 +94,7 @@
     $("#p4").hide();
     });
 
-    function addpagebtn(start,finish,pages){
-        var backpg = start-1;
+    function addpagebtn(start,finish){
         $("#pages").empty();
         $('#next').remove();
 
@@ -119,9 +118,12 @@
     }
 
     function nextpg(entries, rows) {
-        //function to enable next page functionality
-        //var pages = (entries/rows);
+
         var pagesneeded = entries/rows.length;
+        $("#pagenums").text(pagesneeded);
+        //console.log(entries);
+        console.log(pagesneeded);
+
         //if pagesneeded exceeds 5, will just show 5.
         if (pagesneeded > 5) {
             addpagebtn(5);
@@ -135,7 +137,6 @@
 
     function get_table(rows, pageid = 1) {
         localStorage.setItem('rows', rows);
-
 
         $("#pagination").show(); //shows pagination as table loaded
         $("#p4").show();
@@ -151,7 +152,7 @@
             success: function (response) {
                 var entries = response['entries'];
                 var rows =  response['blocks'];
-                var pagenums = response['pagenums']
+                var pagenums = response['pagenums'];
 
                 nextpg(entries,rows);
                 //var json = JSON.parse(response);
@@ -186,7 +187,7 @@
                 rows_info += ' of ';
                 rows_info += response['entries'];
                 $('#example_info').text(rows_info);
-                addpagebtn(pageid,pageid+5,pagenums)
+                addpagebtn(pageid,pageid+5,pagenums);
 
             }
         });
